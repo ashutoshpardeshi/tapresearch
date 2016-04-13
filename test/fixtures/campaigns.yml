@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  length_of_interview: 1
+  cpi: 1.5
+
+two:
+  name: MyString
+  length_of_interview: 1
+  cpi: 1.5

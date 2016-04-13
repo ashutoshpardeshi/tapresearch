@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  campaign_quotum_id: 
+  question_id: 1
+  pre_codes: MyText
+
+two:
+  campaign_quotum_id: 
+  question_id: 1
+  pre_codes: MyText
