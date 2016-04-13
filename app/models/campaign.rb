@@ -1,6 +1,9 @@
 class Campaign < ActiveRecord::Base
   include Authentication
 
+  has_many :campaign_quota
+
+
   def self.get_campaigns
     begin
       base_url = self.get_tap_research_base_url + "/campaigns"
@@ -20,7 +23,7 @@ class Campaign < ActiveRecord::Base
 
     campaigns = self.get_campaigns
     existing_campaign_ids = Campaign.all.map(&:campaign_id)
-    
+
     campaigns.each do |campaign|
 
       Campaign.create(campaign_id: campaign["id"],
