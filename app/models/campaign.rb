@@ -19,13 +19,14 @@ class Campaign < ActiveRecord::Base
   def self.import_campaigns
 
     campaigns = self.get_campaigns
-
+    existing_campaign_ids = Campaign.all.map(&:campaign_id)
+    
     campaigns.each do |campaign|
 
       Campaign.create(campaign_id: campaign["id"],
                       length_of_interview:campaign["length_of_interview"],
                       cpi: campaign["cpi"],
-                      name: campaign["name"])
+                      name: campaign["name"]) unless existing_campaign_ids.include?(campaign["id"])
     end
 
   end
