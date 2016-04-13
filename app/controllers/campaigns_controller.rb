@@ -1,12 +1,13 @@
 class CampaignsController < ApplicationController
 
-  def index
-    @campaigns = Campaign.get_campaigns
-
-  end
 
   def ordered_campaigns
-    
+
+    @campaign_list = Campaign.get_ordered_list
+
+    puts @campaign_list.inspect
+
+
   end
 
 end

@@ -34,5 +34,46 @@ class Campaign < ActiveRecord::Base
 
   end
 
+  def get_quota
+    begin
+      base_url = self.class.get_tap_research_base_url + "/campaigns/#{campaign_id}/"
+      authorization = self.class.get_encoded_authorization
+
+      data = HTTParty.get(base_url,
+                          headers: {"Authorization" => "#{authorization}",
+                                    "Content-Type" => "application/json"})
+
+      return data.parsed_response
+    rescue => e
+      return {success: false,message: e.message}
+    end
+
+  end
+
+  def create_quota
+    response = get_quota
+
+    quotas = response["campaign_quotas"]
+
+    quotas.each do |quota|
+      quotum = CampaignQuotum.create(num_respondents:quota["num_respondents"], campaign_id: id)
+      qualification = quotum.create_campaign_qualifications(quota["campaign_qualifications"])
+
+    end
+
+  end
+
+  def self.get_ordered_list
+
+     campaign_data = Campaign.joins("LEFT JOIN campaign_quota ON campaigns.id = campaign_quota.campaign_id").joins("LEFT JOIN campaign_qualifications ON campaign_quota.id = campaign_qualifications.campaign_quotum_id").group("campaign_qualifications.question_id")
+    # campaign_data = Campaign.joins(campaign_quota: :campaign_qualifications).group("campaign_qualifications.question_id").order("campaigns.cpi DESC, campaigns.length_of_interview ASC")
+
+
+
+  end
+
+
+
+
 
 end
