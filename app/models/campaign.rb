@@ -6,8 +6,10 @@ class Campaign < ActiveRecord::Base
       base_url = self.get_tap_research_base_url + "/campaigns"
       authorization = self.get_encoded_authorization
       data = HTTParty.get(base_url,
-                          headers: {"Authorization" => "token #{authorization}",
+                          headers: {"Authorization" => "#{authorization}",
                                     "Content-Type" => "application/json"})
+
+      return data.parsed_response
     rescue => e
       return {success: false,message: e.message}
     end
@@ -15,6 +17,16 @@ class Campaign < ActiveRecord::Base
   end
 
   def self.import_campaigns
+
+    campaigns = self.get_campaigns
+
+    campaigns.each do |campaign|
+
+      Campaign.create(campaign_id: campaign["id"],
+                      length_of_interview:campaign["length_of_interview"],
+                      cpi: campaign["cpi"],
+                      name: campaign["name"])
+    end
 
   end
 
