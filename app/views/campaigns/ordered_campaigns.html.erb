@@ -1,8 +1,12 @@
-<%=@campaign_list.each do |list| %>
+<%=@campaign_list.each do |question_id,names| %>
     <ul>
+      <li> <%=question_id%></li>
+      <ul>
+        <%names.each do |name|%>
+            <li><%= name%> </li>
+        <% end %>
 
-      <li> </li>
+      </ul>
+
     </ul>
-
-
 <% end %>

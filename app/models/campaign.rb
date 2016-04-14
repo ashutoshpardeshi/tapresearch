@@ -65,8 +65,20 @@ class Campaign < ActiveRecord::Base
 
   def self.get_ordered_list
 
-     campaign_data = Campaign.joins("LEFT JOIN campaign_quota ON campaigns.id = campaign_quota.campaign_id").joins("LEFT JOIN campaign_qualifications ON campaign_quota.id = campaign_qualifications.campaign_quotum_id").order("campaign_qualifications.question_id")
+     campaign_data = Campaign.joins("LEFT JOIN campaign_quota ON campaigns.id = campaign_quota.campaign_id").joins("LEFT JOIN campaign_qualifications ON campaign_quota.id = campaign_qualifications.campaign_quotum_id").select("campaign_qualifications.question_id, campaigns.name").order("campaigns.cpi DESC, campaigns.length_of_interview ASC")
+     list = {}
+     arr = []
+     campaign_data.each do |data|
 
+       if list.has_key?(data.question_id)
+         list[data.question_id] << data.name
+       else
+         list[data.question_id] = [data.name]
+       end
+
+     end
+    puts list.inspect
+    return list
   end
 
 
