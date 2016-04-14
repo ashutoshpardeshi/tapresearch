@@ -65,10 +65,7 @@ class Campaign < ActiveRecord::Base
 
   def self.get_ordered_list
 
-     campaign_data = Campaign.joins("LEFT JOIN campaign_quota ON campaigns.id = campaign_quota.campaign_id").joins("LEFT JOIN campaign_qualifications ON campaign_quota.id = campaign_qualifications.campaign_quotum_id").group("campaign_qualifications.question_id")
-    # campaign_data = Campaign.joins(campaign_quota: :campaign_qualifications).group("campaign_qualifications.question_id").order("campaigns.cpi DESC, campaigns.length_of_interview ASC")
-
-
+     campaign_data = Campaign.joins("LEFT JOIN campaign_quota ON campaigns.id = campaign_quota.campaign_id").joins("LEFT JOIN campaign_qualifications ON campaign_quota.id = campaign_qualifications.campaign_quotum_id").order("campaign_qualifications.question_id")
 
   end
 
