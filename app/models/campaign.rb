@@ -65,8 +65,8 @@ class Campaign < ActiveRecord::Base
 
   def self.get_ordered_list
 
-     campaign_data = Campaign.joins("LEFT JOIN campaign_quota ON campaigns.id = campaign_quota.campaign_id").joins("LEFT JOIN campaign_qualifications ON campaign_quota.id = campaign_qualifications.campaign_quotum_id").select("campaign_qualifications.question_id, campaigns.name").order("campaigns.cpi DESC, campaigns.length_of_interview ASC")
-
+     campaign_data = Campaign.joins("LEFT JOIN campaign_quota ON campaigns.id = campaign_quota.campaign_id").joins("LEFT JOIN campaign_qualifications ON campaign_quota.id = campaign_qualifications.campaign_quotum_id").select("campaign_qualifications.question_id, campaign_qualifications.pre_codes, campaigns.name").order("campaigns.cpi DESC, campaigns.length_of_interview ASC")
+     gender_campaign_data = campaign_data.where("campaign_qualifications.pre_codes = '2' OR campaign_qualifications.pre_codes like '%,2' OR campaign_qualifications.pre_codes like ',2,%' OR campaign_qualifications.pre_codes like '2,%'").select("campaigns.name").map(&:name)
      list = {}
 
      campaign_data.each do |data|
@@ -83,13 +83,13 @@ class Campaign < ActiveRecord::Base
        if list.has_key?(data.question_id)
          list[data.question_id] << data.name
        elsif data.question_id.blank?
-         list['Empty'] = data.name
+         list['Empty'] = [data.name]
        else
          list[data.question_id] = [data.name]
        end
 
      end
-    return list
+    return list, gender_campaign_data
   end
 
 
